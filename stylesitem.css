@@ -1,0 +1,157 @@
+/* Body & container */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+    margin: 0;
+    padding: 40px;
+    color: #1f2937;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Kaarten voor lijsten en taken */
+.task-card {
+    background-color: #ffffffcc;
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    color: #111827;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.task-card h2, .task-card h3 {
+    margin-top: 0;
+    color: #ff6f61;
+}
+
+/* Inputs, textarea, select */
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0 16px 0;
+    border: 2px solid #ff6f61;
+    border-radius: 12px;
+    background-color: #fff8f7;
+    font-size: 1rem;
+    transition: border 0.3s ease, background 0.3s ease;
+}
+input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #ff3b2e;
+    background-color: #fff;
+}
+
+/* Knoppen */
+button {
+    padding: 12px 24px;
+    background: #7c4dff;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background: #651fff;
+    transform: scale(1.05);
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #7c4dff;
+    font-weight: 500;
+}
+a:hover {
+    color: #651fff;
+    text-decoration: underline;
+}
+
+/* Lijst van taken */
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+li {
+    padding: 14px 18px;
+    border-radius: 16px;
+    background-color: #fdf7ff;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+li:hover {
+    background-color: #f0e6ff;
+}
+
+/* Prioriteiten */
+.priority-high {
+    color: #dc2626;
+    font-weight: bold;
+}
+.priority-medium {
+    color: #f97316;
+    font-weight: bold;
+}
+.priority-low {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+/* Sorteer opties */
+.sort-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+.sort-options a {
+    padding: 10px 16px;
+    background: #e0e7ff;
+    color: #1f2937;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.sort-options a:hover {
+    background: #c7d2fe;
+    text-decoration: none;
+}
+
+/* Details knop */
+.details-btn {
+    padding: 8px 14px;
+    background: #ff6f61;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+.details-btn:hover {
+    background: #ff3b2e;
+    transform: scale(1.05);
+}
+
+/* Terug link */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #4b5563;
+    font-weight: 500;
+}
+.back-link:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,100 @@
+/* Achtergrond */
+.login-body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Login box */
+.login-card {
+    background: #ffffffcc; /* lichte transparantie */
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.login-card h2 {
+    margin-bottom: 24px;
+    color: #ff6f61; /* opvallende accentkleur */
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Inputs */
+.login-card input[type="email"],
+.login-card input[type="password"] {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 16px;
+    border: 2px solid #ff6f61;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fff8f7;
+    transition: border 0.3s ease, background 0.3s ease;
+}
+
+.login-card input:focus {
+    border-color: #ff3b2e;
+    outline: none;
+    background: #fff;
+}
+
+/* Buttons */
+.login-card button {
+    width: 100%;
+    padding: 14px;
+    background: #ff6f61;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-card button:hover {
+    background: #ff3b2e;
+    transform: scale(1.05);
+}
+
+/* Error message */
+.error-msg {
+    margin-top: 12px;
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+/* Register link */
+.register-link {
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #ffe3e0;
+    color: #ff6f61;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #ffc1b8;
+}

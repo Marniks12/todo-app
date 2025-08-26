@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db   = 'todo';
+$db   = 'dolist';
 $user = 'root';
 $pass = ''; // vul hier je wachtwoord in als je die hebt
 

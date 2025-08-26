@@ -8,27 +8,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Zoek gebruiker op in database
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    // Controleer wachtwoord
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user'] = $email;
-        header('Location: dashboard.php'); // nog te maken
-        exit;
+    // Eenvoudige e-mail validatie
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Ongeldig e-mailadres.";
+    } elseif (empty($password)) {
+        $error = "Vul je wachtwoord in.";
     } else {
-        $error = "Ongeldige login.";
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password'])) {
+                session_regenerate_id(true); // voorkomt session fixation
+                $_SESSION['user'] = $email;
+                header('Location: dashboard.php');
+                exit;
+            } else {
+                $error = "Ongeldige gebruikersnaam of wachtwoord.";
+            }
+        } catch (PDOException $e) {
+            $error = "Er is iets misgegaan, probeer opnieuw.";
+        }
     }
 }
 ?>
 
-<h2>Inloggen</h2>
-<form method="post">
-    <input type="email" name="email" placeholder="E-mail" required><br><br>
-    <input type="password" name="password" placeholder="Wachtwoord" required><br><br>
-    <button type="submit">Inloggen</button>
-</form>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <title>Inloggen</title>
+    <link rel="stylesheet" href="inlog.css">
+</head>
+<body class="login-body">
+    <div class="login-card">
+        <h2>Inloggen</h2>
+        <form method="post">
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="password" name="password" placeholder="Wachtwoord" required>
+            <button type="submit">Inloggen</button>
+        </form>
 
-<?php if ($error) echo "<p style='color:red;'>$error</p>"; ?>
+        <?php if ($error): ?>
+            <p class="error-msg"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+
+        <div class="register-link">
+            <a href="register.php" class="btn-secondary">Nog geen account? Registreer</a>
+        </div>
+    </div>
+</body>
+</html>

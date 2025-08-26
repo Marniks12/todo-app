@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 </head>
 <body>
 
-<div class="task-card">
+<div class="taskcard">
     <h2>📝 <?= htmlspecialchars($task['title']) ?></h2>
     <p><strong>Prioriteit:</strong> <?= htmlspecialchars($task['priority']) ?></p>
     <p><strong>Status:</strong> <?= htmlspecialchars($task['status']) ?></p>
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 
 <div class="task-card">
     <h3>📌 Commentaren</h3>
-    <form method="post" class="comment-form">
+    <form method="post">
         <textarea name="comment" required placeholder="Voeg commentaar toe..."></textarea><br>
         <button type="submit">Toevoegen</button>
     </form>

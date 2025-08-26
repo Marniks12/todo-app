@@ -1,0 +1,142 @@
+/* Algemene body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+    margin: 0;
+    padding: 30px;
+    color: #333;
+}
+
+/* Welkom sectie */
+.welcome {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Logout knop */
+.logout {
+    background-color: #ff6f61;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 30px;
+    font-weight: 600;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.logout:hover {
+    background-color: #ff3b2e;
+    transform: scale(1.05);
+}
+
+/* Formulier voor nieuwe taak of lijst */
+.list-form {
+    margin-bottom: 25px;
+}
+.list-form input, .list-form select {
+    padding: 14px;
+    width: 250px;
+    border-radius: 12px;
+    border: 2px solid #ff6f61;
+    margin-right: 12px;
+    transition: border 0.3s ease, background 0.3s ease;
+    background: #fff8f7;
+}
+.list-form input:focus, .list-form select:focus {
+    border-color: #ff3b2e;
+    outline: none;
+    background: #fff;
+}
+
+/* Toevoegen knop */
+.add-task-btn {
+    background: #7c4dff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(124, 77, 255, 0.3);
+    transition: all 0.3s ease;
+}
+.add-task-btn:hover {
+    background: #651fff;
+    box-shadow: 0 6px 12px rgba(124, 77, 255, 0.4);
+    transform: scale(1.05);
+}
+
+/* Success & error messages */
+.success {
+    color: #388e3c;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.error {
+    color: #d32f2f;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Lijst container */
+.list-container {
+    background-color: #ffffffcc;
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+/* Lijst titel */
+.list-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+/* Taken lijst */
+.list-group {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.list-item {
+    background: #fdf7ff;
+    margin-bottom: 14px;
+    padding: 16px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.list-item:hover {
+    background: #f0e6ff;
+}
+
+/* Task info */
+.list-info .list-name {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Acties bij taken */
+.list-actions a {
+    margin-left: 12px;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.edit-btn:hover {
+    color: #0288d1;
+    transform: scale(1.1);
+}
+.delete-btn:hover {
+    color: #e53935;
+    transform: scale(1.1);
+}

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
             $stmt->execute([$email, $hashedPassword]);
             $_SESSION['user'] = $email;
-            header('Location: dashboard.php'); // later maken we deze pagina
+            header('Location: dashboard.php'); 
             exit;
         } catch (PDOException $e) {
             $error = "E-mail is al geregistreerd.";
@@ -27,11 +27,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Registreren</h2>
-<form method="post">
-    <input type="email" name="email" placeholder="E-mail" required><br><br>
-    <input type="password" name="password" placeholder="Wachtwoord (min 6 tekens)" required><br><br>
-    <button type="submit">Registreren</button>
-</form>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Registreren</title>
+    <link rel="stylesheet" href="inlog.css">
+</head>
+<body class="login-body">
+    <div class="login-card">
+        <h2>Registreren</h2>
+        <form method="post">
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="password" name="password" placeholder="Wachtwoord (min. 6 tekens)" required>
+            <button type="submit">Registreren</button>
+        </form>
 
-<?php if ($error) echo "<p style='color:red;'>$error</p>"; ?>
+        <?php if ($error): ?>
+            <p class="error-msg"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+
+        <div class="register-link">
+            <a href="login.php" class="btn-secondary">Al een account? Inloggen</a>
+        </div>
+    </div>
+</body>
+</html>

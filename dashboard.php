@@ -40,26 +40,48 @@ $stmt->execute([$userId]);
 $lists = $stmt->fetchAll();
 ?>
 
-<h2>Welkom, <?= htmlspecialchars($_SESSION['user']) ?></h2>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-<a href="logout.php">Uitloggen</a>
+    <h2 class="welcome">Welkom, <?= htmlspecialchars($_SESSION['user']) ?></h2>
+    <a class="logout" href="logout.php">Uitloggen</a>
 
-<h3>Nieuwe lijst toevoegen</h3>
-<form method="post">
-    <input type="text" name="title" placeholder="Bijv. Portugal Trip" required>
-    <button type="submit">Toevoegen</button>
-</form>
+    <div class="list-form">
+        <form method="post">
+            <input type="text" name="title" placeholder="Bijv. Portugal Trip" required>
+            <button type="submit" class="add-task-btn">+ Add List</button>
+        </form>
+    </div>
 
-<?php if ($error) echo "<p style='color:red;'>$error</p>"; ?>
-<?php if ($success) echo "<p style='color:green;'>$success</p>"; ?>
+    <?php if ($error): ?>
+        <p class="error"><?= $error ?></p>
+    <?php endif; ?>
+    <?php if ($success): ?>
+        <p class="success"><?= $success ?></p>
+    <?php endif; ?>
 
-<h3>Mijn lijsten</h3>
-<ul>
-    <?php foreach ($lists as $list): ?>
-        <li>
-            <?= htmlspecialchars($list['title']) ?>
-            <a href="delete_list.php?id=<?= $list['id'] ?>" onclick="return confirm('Weet je zeker dat je deze lijst wilt verwijderen?');">❌</a>
-            <a href="list.php?id=<?= $list['id'] ?>">📝</a>
-        </li>
-    <?php endforeach; ?>
-</ul>
+    <div class="list-container">
+        <h3 class="list-title">Mijn lijsten</h3>
+        <ul class="list-group">
+            <?php foreach ($lists as $list): ?>
+                <li class="list-item">
+                    <div class="list-info">
+                        <span class="list-name"><?= htmlspecialchars($list['title']) ?></span>
+                    </div>
+                    <div class="list-actions">
+                        <a class="edit-btn" href="list.php?id=<?= $list['id'] ?>">✏️</a>
+                        <a class="delete-btn" href="delete_list.php?id=<?= $list['id'] ?>" onclick="return confirm('Weet je zeker dat je deze lijst wilt verwijderen?');">🗑️</a>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+</body>
+</html>
