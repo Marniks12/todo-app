@@ -1,14 +1,18 @@
 <?php
-$host = 'localhost';
-$db   = 'dolist';
+$host = 'shuttle.proxy.rlwy.net';
+$port = 18284;
+$db   = 'railway';
 $user = 'root';
-$pass = ''; // vul hier je wachtwoord in als je die hebt
+$pass = 'SgGpYCyiCMhVFPugBvFfuiSsWQPnnZbg';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
-    // Zet de error mode op exception zodat fouten duidelijk zijn
+    $pdo = new PDO(
+        "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4",
+        $user,
+        $pass
+    );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Fout met verbinden: " . $e->getMessage());
+    die("Fout bij verbinden: " . $e->getMessage());
 }
 ?>
