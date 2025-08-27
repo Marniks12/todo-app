@@ -1,25 +1,25 @@
 <?php
 session_start();
 require_once 'db.php';
+require_once 'User.php';
+require_once 'Task.php';
 
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
 
-// User ophalen
-$stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-$stmt->execute([$_SESSION['user']]);
-$user = $stmt->fetch();
-$userId = $user['id'];
+try {
+    $user = new User($pdo, $_SESSION['user']);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
 
 // Taak ophalen
 $taskId = (int)($_GET['id'] ?? 0);
-$stmt = $pdo->prepare("SELECT * FROM tasks WHERE id = ?");
-$stmt->execute([$taskId]);
-$task = $stmt->fetch();
-
-if (!$task) {
+try {
+    $task = new Task($pdo, $taskId);
+} catch (Exception $e) {
     die("Taak niet gevonden.");
 }
 
@@ -27,8 +27,7 @@ if (!$task) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
     $comment = trim($_POST['comment']);
     if ($comment !== '') {
-        $stmt = $pdo->prepare("INSERT INTO comments (task_id, user_id, comment) VALUES (?, ?, ?)");
-        $stmt->execute([$taskId, $userId, $comment]);
+        $task->addComment($user->getId(), $comment);
     }
     header("Location: item.php?id=$taskId");
     exit;
@@ -36,25 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
 
 // ✅ Bestand uploaden
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    $uploadDir = __DIR__ . '/uploads/'; // absoluut pad naar de uploads map
-
-    // als uploads-map niet bestaat, maak die aan
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
-    $filename = basename($_FILES['file']['name']);
-    $targetPath = $uploadDir . time() . '_' . $filename;
-
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $targetPath)) {
-        // voor de database opslaan we alleen het relatieve pad
-        $relativePath = 'uploads/' . time() . '_' . $filename;
-        $stmt = $pdo->prepare("INSERT INTO files (task_id, file_name, file_path) VALUES (?, ?, ?)");
-        $stmt->execute([$taskId, $filename, $relativePath]);
-    }
+    $task->uploadFile($_FILES['file']);
     header("Location: item.php?id=$taskId");
     exit;
 }
+
+// Comments & Files ophalen
+$comments = $task->getComments();
+$files = $task->getFiles();
 ?>
 
 <!DOCTYPE html>
@@ -67,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 <body>
 
 <div class="taskcard">
-    <h2>📝 <?= htmlspecialchars($task['title']) ?></h2>
-    <p><strong>Prioriteit:</strong> <?= htmlspecialchars($task['priority']) ?></p>
-    <p><strong>Status:</strong> <?= htmlspecialchars($task['status']) ?></p>
+    <h2>📝 <?= htmlspecialchars($task->getTitle()) ?></h2>
+    <p><strong>Prioriteit:</strong> <?= htmlspecialchars($task->getPriority()) ?></p>
+    <p><strong>Status:</strong> <?= htmlspecialchars($task->getStatus()) ?></p>
 </div>
 
 <div class="task-card">
@@ -80,12 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     </form>
 
     <ul class="comments">
-        <?php
-        $stmt = $pdo->prepare("SELECT * FROM comments WHERE task_id = ? ORDER BY created_at DESC");
-        $stmt->execute([$taskId]);
-        $comments = $stmt->fetchAll();
-
-        foreach ($comments as $cmt): ?>
+        <?php foreach ($comments as $cmt): ?>
             <li><?= htmlspecialchars($cmt['comment']) ?> <em>(<?= $cmt['created_at'] ?>)</em></li>
         <?php endforeach; ?>
     </ul>
@@ -99,12 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     </form>
 
     <ul class="files">
-        <?php
-        $stmt = $pdo->prepare("SELECT * FROM files WHERE task_id = ?");
-        $stmt->execute([$taskId]);
-        $files = $stmt->fetchAll();
-
-        foreach ($files as $file): ?>
+        <?php foreach ($files as $file): ?>
             <li><a href="<?= htmlspecialchars($file['file_path']) ?>" target="_blank"><?= htmlspecialchars($file['file_name']) ?></a></li>
         <?php endforeach; ?>
     </ul>

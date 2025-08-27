@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once 'db.php';
+require_once 'User.php';
+require_once 'TodoList.php';
 
 // Check of gebruiker is ingelogd
 if (!isset($_SESSION['user'])) {
@@ -8,23 +10,23 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Haal gebruikersinfo op
-$stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-$stmt->execute([$_SESSION['user']]);
-$user = $stmt->fetch();
+// User object aanmaken
+try {
+    $user = new User($pdo, $_SESSION['user']);
+} catch (Exception $e) {
+    die("Gebruiker niet gevonden");
+}
 
-$userId = $user['id'];
 $error = '';
 $success = '';
 
 // Lijst toevoegen
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
-
     if ($title !== '') {
         try {
             $stmt = $pdo->prepare("INSERT INTO todo_lists (user_id, title) VALUES (?, ?)");
-            $stmt->execute([$userId, $title]);
+            $stmt->execute([$user->getId(), $title]);
             $success = "Lijst toegevoegd!";
         } catch (PDOException $e) {
             $error = "Kon lijst niet toevoegen.";
@@ -36,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Lijsten ophalen
 $stmt = $pdo->prepare("SELECT * FROM todo_lists WHERE user_id = ? ORDER BY created_at DESC");
-$stmt->execute([$userId]);
+$stmt->execute([$user->getId()]);
 $lists = $stmt->fetchAll();
 ?>
 
@@ -49,7 +51,7 @@ $lists = $stmt->fetchAll();
 </head>
 <body>
 
-    <h2 class="welcome">Welkom, <?= htmlspecialchars($_SESSION['user']) ?></h2>
+    <h2 class="welcome">Welkom, <?= htmlspecialchars($user->getEmail()) ?></h2>
     <a class="logout" href="logout.php">Uitloggen</a>
 
     <div class="list-form">
@@ -60,23 +62,29 @@ $lists = $stmt->fetchAll();
     </div>
 
     <?php if ($error): ?>
-        <p class="error"><?= $error ?></p>
+        <p class="error"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
     <?php if ($success): ?>
-        <p class="success"><?= $success ?></p>
+        <p class="success"><?= htmlspecialchars($success) ?></p>
     <?php endif; ?>
 
     <div class="list-container">
         <h3 class="list-title">Mijn lijsten</h3>
         <ul class="list-group">
-            <?php foreach ($lists as $list): ?>
+            <?php foreach ($lists as $listRow): 
+                try {
+                    $list = new TodoList($pdo, $listRow['id']);
+                } catch (Exception $e) {
+                    continue;
+                }
+            ?>
                 <li class="list-item">
                     <div class="list-info">
-                        <span class="list-name"><?= htmlspecialchars($list['title']) ?></span>
+                        <span class="list-name"><?= htmlspecialchars($list->getTitle()) ?></span>
                     </div>
                     <div class="list-actions">
-                        <a class="edit-btn" href="list.php?id=<?= $list['id'] ?>">✏️</a>
-                        <a class="delete-btn" href="delete_list.php?id=<?= $list['id'] ?>" onclick="return confirm('Weet je zeker dat je deze lijst wilt verwijderen?');">🗑️</a>
+                        <a class="edit-btn" href="list.php?id=<?= $list->getId() ?>">✏️</a>
+                        <a class="delete-btn" href="delete_list.php?id=<?= $list->getId() ?>" onclick="return confirm('Weet je zeker dat je deze lijst wilt verwijderen?');">🗑️</a>
                     </div>
                 </li>
             <?php endforeach; ?>
