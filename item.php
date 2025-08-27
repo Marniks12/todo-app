@@ -36,13 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
 
 // ✅ Bestand uploaden
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    $uploadDir = 'uploads/';
+    $uploadDir = __DIR__ . '/uploads/'; // absoluut pad naar de uploads map
+
+    // als uploads-map niet bestaat, maak die aan
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
     $filename = basename($_FILES['file']['name']);
     $targetPath = $uploadDir . time() . '_' . $filename;
 
     if (move_uploaded_file($_FILES['file']['tmp_name'], $targetPath)) {
+        // voor de database opslaan we alleen het relatieve pad
+        $relativePath = 'uploads/' . time() . '_' . $filename;
         $stmt = $pdo->prepare("INSERT INTO files (task_id, file_name, file_path) VALUES (?, ?, ?)");
-        $stmt->execute([$taskId, $filename, $targetPath]);
+        $stmt->execute([$taskId, $filename, $relativePath]);
     }
     header("Location: item.php?id=$taskId");
     exit;
