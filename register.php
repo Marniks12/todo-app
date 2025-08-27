@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // E-mail validatie en wachtwoord lengte check
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($password) >= 6) {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($password) >= 3) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         try {
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "E-mail is al geregistreerd.";
         }
     } else {
-        $error = "Ongeldig e-mailadres of wachtwoord te kort (min 6 tekens).";
+        $error = "Ongeldig e-mailadres of wachtwoord te kort (min 3 tekens).";
     }
 }
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 class Task {
     private $pdo;
     private $id;
@@ -54,8 +54,8 @@ class Task {
         return $stmt->fetchAll();
     }
 
-    // ✅ Bestand uploaden
-    public function addFile($file) {
+    // ✅ Bestand uploaden (hernoemd naar uploadFile)
+    public function uploadFile($file) {
         $uploadDir = __DIR__ . '/uploads/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
