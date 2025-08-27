@@ -155,3 +155,11 @@ li:hover {
 .back-link:hover {
     text-decoration: underline;
 }
+.status-dropdown {
+    padding: 6px 10px;  /* kortere padding */
+    font-size: 0.9rem;  /* iets kleiner lettertype */
+    border-radius: 8px;
+    border: 2px solid #ff6f61;
+    background-color: #fff8f7;
+    max-width: 140px;   /* pas dit naar wens aan */
+}
