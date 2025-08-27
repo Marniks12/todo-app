@@ -116,19 +116,24 @@ $tasks = $stmt->fetchAll();
         <h3>📋 Taken</h3>
         <ul>
             <?php foreach ($tasks as $task): ?>
-                <li>
-                    <input type="checkbox" class="toggle-status"
-                           data-id="<?= $task['id'] ?>"
-                           <?= $task['status'] === 'done' ? 'checked' : '' ?>>
+            <li>
+    <span><?= htmlspecialchars($task['title']) ?></span>
+    <a href="item.php?id=<?= $task['id'] ?>" class="details-btn">Details</a>
+    - <strong class="priority-<?= htmlspecialchars($task['priority']) ?>">
+        <?= htmlspecialchars($task['priority']) ?>
+    </strong>
 
-                    <span><?= htmlspecialchars($task['title']) ?></span>
-                    <a href="item.php?id=<?= $task['id'] ?>" class="details-btn">Details</a>
-                    - <strong class="priority-<?= htmlspecialchars($task['priority']) ?>">
-                        <?= htmlspecialchars($task['priority']) ?>
-                    </strong>
-                    <a href="delete_task.php?id=<?= $task['id'] ?>&list_id=<?= $listId ?>"
-                       onclick="return confirm('Taak verwijderen?')">❌</a>
-                </li>
+    <!-- Dropdown status -->
+    <select class="status-dropdown" data-id="<?= $task['id'] ?>">
+        <option value="todo" <?= $task['status'] === 'todo' ? 'selected' : '' ?>>Todo</option>
+        <option value="in_progress" <?= $task['status'] === 'in_progress' ? 'selected' : '' ?>>In Progress</option>
+        <option value="done" <?= $task['status'] === 'done' ? 'selected' : '' ?>>Done</option>
+    </select>
+
+    <a href="delete_task.php?id=<?= $task['id'] ?>&list_id=<?= $listId ?>"
+       onclick="return confirm('Taak verwijderen?')">❌</a>
+</li>
+
             <?php endforeach; ?>
         </ul>
     </div>
@@ -138,39 +143,23 @@ $tasks = $stmt->fetchAll();
 </main>
 
 <script>
-
-            document.querySelectorAll('.toggle-status').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-        const taskId = checkbox.dataset.id;
-        const label = checkbox.nextElementSibling; // span met taaknaam
+document.querySelectorAll('.status-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('change', () => {
+        const taskId = dropdown.dataset.id;
+        const newStatus = dropdown.value;
 
         fetch('toggle_status.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'id=' + encodeURIComponent(taskId)
+            body: 'id=' + encodeURIComponent(taskId) + '&status=' + encodeURIComponent(newStatus)
         })
         .then(response => response.json())
         .then(data => {
-            if(data.status){
-                if(data.status === 'done'){
-                    label.style.textDecoration = 'line-through';
-                    label.style.color = '#999';
-                } else {
-                    label.style.textDecoration = 'none';
-                    label.style.color = '#000';
-                }
-            } else {
-                alert('Kon status niet wijzigen');
-                checkbox.checked = !checkbox.checked; // terugzetten
-            }
-        })
-        .catch(err => {
-            alert('Er is iets misgegaan');
-            checkbox.checked = !checkbox.checked; // terugzetten
+            console.log('Status gewijzigd naar:', data.status);
         });
     });
 });
-
 </script>
+
 </body>
 </html>
