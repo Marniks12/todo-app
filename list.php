@@ -138,9 +138,11 @@ $tasks = $stmt->fetchAll();
 </main>
 
 <script>
-document.querySelectorAll('.toggle-status').forEach(checkbox => {
+
+            document.querySelectorAll('.toggle-status').forEach(checkbox => {
     checkbox.addEventListener('change', () => {
         const taskId = checkbox.dataset.id;
+        const label = checkbox.nextElementSibling; // span met taaknaam
 
         fetch('toggle_status.php', {
             method: 'POST',
@@ -149,10 +151,26 @@ document.querySelectorAll('.toggle-status').forEach(checkbox => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Status gewijzigd naar:', data.status);
+            if(data.status){
+                if(data.status === 'done'){
+                    label.style.textDecoration = 'line-through';
+                    label.style.color = '#999';
+                } else {
+                    label.style.textDecoration = 'none';
+                    label.style.color = '#000';
+                }
+            } else {
+                alert('Kon status niet wijzigen');
+                checkbox.checked = !checkbox.checked; // terugzetten
+            }
+        })
+        .catch(err => {
+            alert('Er is iets misgegaan');
+            checkbox.checked = !checkbox.checked; // terugzetten
         });
     });
 });
+
 </script>
 </body>
 </html>

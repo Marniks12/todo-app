@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update = $pdo->prepare("UPDATE tasks SET status = ? WHERE id = ?");
             $update->execute([$newStatus, $taskId]);
 
-            echo json_encode(['status' => $newStatus]);
+            echo json_encode(['succes' => true, 'status' => $newStatus]);
             exit;
         }
     }
 }
 http_response_code(400);
-echo json_encode(['error' => 'Ongeldige aanvraag']);
+echo json_encode(['succes' => false, 'error' => 'Ongeldige aanvraag']);
