@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once __DIR__ . '/db.php';
-
-require_once __DIR__ . '/TodoList.php';
+require_once __DIR__ . '/user.php';
+require_once __DIR__ . '/todoList.php';
 
 
 // Check of gebruiker is ingelogd

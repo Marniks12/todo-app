@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once 'db.php';
-require_once 'User.php';
-require_once 'Task.php';
+require_once 'user.php';
+require_once 'task.php';
 
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
