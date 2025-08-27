@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Registreren</h2>
         <form method="post">
             <input type="email" name="email" placeholder="E-mail" required>
-            <input type="password" name="password" placeholder="Wachtwoord (min. 6 tekens)" required>
+            <input type="password" name="password" placeholder="Wachtwoord (min. 3 tekens)" required>
             <button type="submit">Registreren</button>
         </form>
 
