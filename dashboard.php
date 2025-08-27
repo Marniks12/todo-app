@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once 'db.php';
-require_once 'User.php';
-require_once 'TodoList.php';
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/User.php';
+require_once __DIR__ . '/TodoList.php';
+
 
 // Check of gebruiker is ingelogd
 if (!isset($_SESSION['user'])) {
